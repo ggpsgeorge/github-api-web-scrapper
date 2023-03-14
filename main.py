@@ -33,7 +33,8 @@ def get_all_search_url_responses(search_url: str, num_of_pages: int):
 
 def write_json_response_to_file(response, path):
     with open(path, "x") as outfile:
-            json.dump(response.json(), outfile)
+        json.dump(response.json(), outfile)
+    outfile.close()
 
 
 def get_token_and_user(path: str):
@@ -49,21 +50,28 @@ def get_token_and_user(path: str):
 def load_json_data(path: str):
     with open(path) as json_file:
         data = json.load(json_file)
+    json_file.close()
     
     return data
 
 
+def save_repos_urls(num_of_pages):
+    for i in range(1, num_of_pages+1):
+        data_items = load_json_data(JSON_DATA + str(i) + ".json")['items']
+        
+        with open("data//repos_urls.txt", "a") as repos:
+            for item in data_items:
+                repos.write(item['html_url'] + "\n")
+        repos.close()
+
 if __name__ == '__main__':
     # needs the page of the search
     search_url: str = 'https://api.github.com/search/repositories?q=cucumber+bdd&type=Repositories&per_page=100&page='
-    # github only show the first 1000 searches
+    # # github only show the first 1000 searches
     num_of_pages = 10
-    get_all_search_url_responses(search_url, num_of_pages)
+    # get_all_search_url_responses(search_url, num_of_pages)
 
-    data_items = load_json_data(JSON_DATA + "1" + ".json")['items']
-    
-    for item in data_items:
-        print(item['html_url'])
+    save_repos_urls(num_of_pages)
     
     # print(get_api_limit())
         
