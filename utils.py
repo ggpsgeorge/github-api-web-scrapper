@@ -69,8 +69,13 @@ def save_repos_urls(num_of_pages):
 def clone_repo(repo_url):
     """Clone the entire repository"""
     user, token = get_token_and_user(USER_TOKEN_PATH)
-    response = requests.get(repo_url, auth=(user, token))
+    response = (requests.get(repo_url, auth=(user, token))).json()
     
+    # Needs to delete the {path+}
+    contents_url = response['contents_url'][:-8]
+    print(contents_url)
+    
+    response = (requests.get(contents_url, auth=(user, token))).json()
     print(response)
 
 
