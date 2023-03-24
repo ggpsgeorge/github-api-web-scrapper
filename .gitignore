@@ -1,2 +1,4 @@
 __pycache__/*
+data/
+!data/request_data_1.json
 github_token.txt
