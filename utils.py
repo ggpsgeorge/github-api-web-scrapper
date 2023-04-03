@@ -63,18 +63,17 @@ def save_repos_urls(num_of_pages: int):
         
         with open("data//repos_urls.txt", "a") as repos:
             for item in data_items:
-                repos.write(item['html_url'] + "\n")
+                repos.write(REPOS_URL + "/" + item['full_name'] + "\n")
         repos.close()
 
-def get_repo_contents(repo_url: str):
+def get_repo_contents(repo_url: str, extension: str):
     """Get the url of the files and dirs of the repo"""
     user, token = get_token_and_user(USER_TOKEN_PATH)
     response = (requests.get(repo_url, auth=(user, token))).json()
     
     # Needs to delete the {path+}
     contents_url = response['contents_url'][:-8]
-    
-    download_files(contents_url, ".md")
+    download_files(contents_url, extension)
 
 def download_files(urls: list[str], extension: str):
     """Download the files with the choosen extension"""
@@ -83,12 +82,20 @@ def download_files(urls: list[str], extension: str):
     
     for url in response:
         if url['type'] == 'file':
-            download_response = requests.get(url['download_url'])
-            with open("downloaded_files//" + str(url["name"]), "wb") as file:
-                file.write(download_response.content)
-            file.close()  
+            if url['name'][len(url['name']) - len(extension):] == extension:
+                download_response = requests.get(url['download_url'])
+                with open("downloaded_files//" + str(url["name"]), "wb") as file:
+                    file.write(download_response.content)
+                file.close()  
         else:
             download_files(url['url'], extension)
-    
-    
-   
+
+def read_user_repo_urls_file(path: str) -> list[str]:
+    urls = []
+
+    file = open(path, "r")
+    for line in file:
+        urls.append(line.strip("\n"))
+    file.close()
+
+    return urls
