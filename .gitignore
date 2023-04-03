@@ -1,6 +1,6 @@
 __pycache__/*
-data/
+data/*
 !data/request_data_1.json
-downloaded_files/
-!downloaded_files\append_snippets.feature
+downloaded_files/*
+!downloaded_files/append_snippets.feature
 github_token.txt
