@@ -8,6 +8,7 @@ if __name__ == '__main__':
     # utils.get_all_search_url_responses(search_url, num_of_pages)
     # utils.save_repos_urls(num_of_pages)
     # print(utils.get_api_limit())
-    repo_url = utils.REPOS_URL + "/ggpsgeorge/Java-PoW"
-    utils.clone_repo(repo_url)
+    user_repo = "/ggpsgeorge/Java-PoW"
+    repo_url = utils.REPOS_URL + user_repo
+    utils.get_repo_contents(repo_url)
         

@@ -57,7 +57,7 @@ def load_json_data(path: str):
     return data
 
 
-def save_repos_urls(num_of_pages):
+def save_repos_urls(num_of_pages: int):
     for i in range(1, num_of_pages+1):
         data_items = load_json_data(JSON_DATA + str(i) + ".json")['items']
         
@@ -66,17 +66,29 @@ def save_repos_urls(num_of_pages):
                 repos.write(item['html_url'] + "\n")
         repos.close()
 
-def clone_repo(repo_url):
-    """Clone the entire repository"""
+def get_repo_contents(repo_url: str):
+    """Get the url of the files and dirs of the repo"""
     user, token = get_token_and_user(USER_TOKEN_PATH)
     response = (requests.get(repo_url, auth=(user, token))).json()
     
     # Needs to delete the {path+}
     contents_url = response['contents_url'][:-8]
-    print(contents_url)
     
-    response = (requests.get(contents_url, auth=(user, token))).json()
-    print(response)
+    download_files(contents_url, ".md")
 
-
+def download_files(urls: list[str], extension: str):
+    """Download the files with the choosen extension"""
+    user, token = get_token_and_user(USER_TOKEN_PATH)
+    response = (requests.get(urls, auth=(user, token))).json()
+    
+    for url in response:
+        if url['type'] == 'file':
+            download_response = requests.get(url['download_url'])
+            with open("downloaded_files//" + str(url["name"]), "wb") as file:
+                file.write(download_response.content)
+            file.close()  
+        else:
+            download_files(url['url'], extension)
+    
+    
    
