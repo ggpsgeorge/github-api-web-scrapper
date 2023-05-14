@@ -6,7 +6,7 @@ The query must have this style 'https://api.github.com/search/repositories?q=cuc
 
 Nothing Fancy.
 
-Generate a Token from github, for you to be able to use the API without too many limits. Then, commment or uncomment the functions that you want to use in the main file. Also, the variables, like the search_url. 
+Generate a Token from github, for you to be able to use the API without too many limits. The script reads the username and token, so make sure to create a txt called github_token.txt, and write the username, then a newline, and the token. Then, commment or uncomment the functions that you want to use in the main file. Also, the variables, like the search_url. 
 
 The functions used in the main file are in the utils file.
 
